@@ -5,7 +5,10 @@ import Loading from "../Loading/Loading";
 const Home = () => {
   const [usersList, setUsersList] = useState([]);
   const [usersdetails, setUsersDetails] = useState([]);
+  const [color, setColor] = useState("11")
+
   const [loading, setLoading] = useState(true);
+  const [loadingtwo, setLoadingTwo] = useState(false);
 
   useEffect(() => {
     axios
@@ -16,133 +19,163 @@ const Home = () => {
       });
   }, []);
 
-  //   console.log(usersList);
+    console.log(usersList[0]?.avatar);
   //   console.log(usersdetails);
 
+
+
   const handleUser = (id) => {
-    console.log(id);
+    setLoadingTwo(true)
 
     axios
-      .get(`https://602e7c2c4410730017c50b9d.mockapi.io/users/${id}`)
+      .get(`https://602e7c2c4410730017c50b9d.mockapi.io/users/${id} `)
+      .then((user) => {
+        setLoading(false);
+        console.log(user.data);
+        setUsersDetails(user.data);
+        setLoadingTwo(false)
+      });
+  };
+
+  useEffect(()=>{
+    axios
+      .get(`https://602e7c2c4410730017c50b9d.mockapi.io/users/11`)
       .then((user) => {
         setLoading(false);
         console.log(user.data);
         setUsersDetails(user.data);
       });
-  };
+  },[])
+
+
+
 
   if (loading) {
     return <Loading></Loading>;
   }
+ 
 
   return (
     <div>
-      {/* <Loading></Loading> */}
+      
 
-      <div className="lg:grid lg:grid-cols-2 gap-10 mt-10">
-        {/* User List Section */}
+      <div className="lg:flex lg:flex-row-reverse  gap-10 mt-10">
+       
 
-        <div>
-          <p className="w-full mb-5  lg:sticky top-0 shadow-2xl bg-blue-300 text-4xl text-center py-5 rounded-lg font-bold hover:bg-blue-800 hover:text-white">
+        {/* user Details Section */}
+
+        <div className=" w-full ">
+          <p className="w-full sticky top-0 shadow-current text-white bg-gray-800 text-3xl text-center py-5 rounded-lg font-bold hover:hover:animate-pulse">
+            USER DETAILS
+          </p>
+
+          {
+            loadingtwo ?
+             <p className="sticky  lg:top-48 text-center font-semibold text-2xl my-20 flex justify-center text-gray-900">L<p className='w-4 h-4 border-4 mt-3 border-dashed rounded-full animate-spin  border-gray-900'></p>ading...</p>
+             :
+             <div className="lg:sticky lg:top-28 m-2">
+             <img
+               className="w-2/12 hover:animate-bounce rounded-full mx-auto mt-8 border-4 border-gray-900"
+               src={usersdetails.avatar}
+               alt="avatar"
+             />
+ 
+             {usersdetails?.profile?.username ? (
+               <p className="text-xl text-center mt-3 font-semibold">
+                 @{usersdetails?.profile?.username}
+               </p>
+             ) : (
+               <p className="text-xl text-center mt-3 font-semibold">No data to show</p>
+             )}
+ 
+ 
+             <div className="lg:w-2/3  mx-auto mt-3 ">
+             {
+                 usersdetails?.Bio ? 
+                 <p className="hover:animate-pulse text-lg border-2 border-gray-900 bg-gray-800 text-white p-2 py-5 font-semibold rounded-md">{usersdetails.Bio}</p>
+                 :
+                 <p className="hover:animate-pulse text-lg border-2 border-gray-900 bg-gray-800 text-white p-2 py-5 font-semibold rounded-md">No data to show</p>
+             }
+ 
+             <p className="mt-7 text-lg  font-semibold">Full Name</p>
+             {
+                 usersdetails?.profile?.firstName ? 
+                 <p className="hover:animate-pulse text-lg border-2 border-gray-900 bg-gray-800 text-white p-2 py-5 font-semibold rounded-md" >{usersdetails.profile.firstName} {usersdetails.profile.lastName}</p>
+                 :
+                 <p className="hover:animate-pulse text-lg border-2 border-gray-900 bg-gray-800 text-white p-2 py-5 font-semibold rounded-md">No data to show</p>
+             }
+             
+ 
+             
+             <p className="mt-7 text-lg font-semibold">Job Title</p>
+             {
+                 usersdetails?.jobTitle ? 
+                 <p className="hover:animate-pulse text-lg border-2 border-gray-900 bg-gray-800 text-white p-2 py-5 font-semibold rounded-md" >{usersdetails.jobTitle}</p>
+                 :
+                 <p className="hover:animate-pulse text-lg border-2 border-gray-900 bg-gray-800 text-white p-2 py-5 font-semibold rounded-md">No data to show</p>
+             }
+             
+             <p className="mt-7 text-lg font-semibold">Email</p>
+             {
+                 usersdetails?.profile?.email  ? 
+                 <p className="hover:animate-pulse text-lg border-2 border-gray-900 bg-gray-800 text-white p-2 py-5 font-semibold rounded-md" >{usersdetails.profile.email}</p>
+                 :
+                 <p className="hover:animate-pulse text-lg border-2 border-gray-900 bg-gray-800 text-white p-2 py-5 font-semibold rounded-md">No data to show</p>
+             }
+ 
+ 
+ 
+             </div>
+ 
+ 
+ 
+           </div>
+          }
+
+         
+        </div>
+
+
+
+
+
+         {/* User List Section */}
+
+         <div className="w-full">
+          <p className="w-full sticky top-0 shadow-current text-white bg-gray-800 text-3xl text-center py-5 rounded-lg font-bold hover:animate-pulse">
             USER LIST
           </p>
 
           {usersList?.length &&
             usersList.map((user) => (
-              <div
-                className="w-full flex shadow-md bg-blue-200 border-2 border-blue-300 my-2 rounded-lg cursor-pointer hover:bg-blue-600 hover:text-white hover:border-blue-900"
+              <div 
+                className= "item  min-w-fit m-2  shadow-md  border-2 border-gray-600 my-2 rounded-md cursor-pointer "
                 key={user.id}
-                onClick={() => handleUser(user.id)}
+                onClick={(event) =>handleUser(user.id) || setColor(event.target.closest(".item").id)}
               >
-                {<img
-                  className="w-2/12  rounded-full p-3"
-                  src={user.avatar}
-                  alt="profile"
-                /> ? (
+                <div id={user.id} className={`flex item ${ color === user.id ? "bg-gray-900   text-white" : "bg-gray-400  border-gray-700 hover:animate-pulse"}`}>
+                {
+                    user.avatar ? 
                   <img
-                    className="w-2/12  rounded-full p-3"
+                    className=" w-2/12 border-2 border-gray-900 m-2  rounded-full"
                     src={user.avatar}
-                    alt=""
+                    alt="avatar"
                   />
-                ) : (
+                 : (
                   <img
                     className="w-2/12  rounded-full "
                     src="https://i.ibb.co/47NjXRW/img-avatar3.png"
-                    alt=""
+                    alt="avatar"
                   />
-                )}
+                )
+                }
 
                 <p className="my-auto text-3xl">
                   {user.profile.firstName} {user.profile.lastName}
                 </p>
+                </div>
               </div>
             ))}
-        </div>
-
-        {/* user Details Section */}
-
-        <div>
-          <p className="w-full lg:sticky top-0 shadow-2xl bg-blue-300 text-4xl text-center py-5 rounded-lg font-bold hover:bg-blue-800 hover:text-white">
-            USER DETAILS
-          </p>
-
-          <div className="lg:sticky top-24">
-            <img
-              className="w-2/12  rounded-full mx-auto mt-10"
-              src={usersdetails.avatar}
-              alt="profile"
-            />
-
-            {usersdetails?.profile?.username ? (
-              <p className="text-xl text-center mt-3 font-semibold">
-                @{usersdetails?.profile?.username}
-              </p>
-            ) : (
-              <p className="text-xl text-center mt-3 font-semibold">Data Not Found</p>
-            )}
-
-
-            <div className="w-1/2 mx-auto mt-3">
-            {
-                usersdetails?.Bio ? 
-                <p className="  border-2 border-gray-400 bg-slate-300 p-2 py-5 rounded-md">{usersdetails.Bio}</p>
-                :
-                <p className=" border-2 border-gray-400 bg-slate-300 p-2 py-5 rounded-md">Data Not Found</p>
-            }
-
-            <p className="mt-7 font-semibold">Full Name</p>
-            {
-                usersdetails?.profile?.firstName ? 
-                <p className=" border-2 border-gray-400 bg-slate-300 p-2 py-2 rounded-md" >{usersdetails.profile.firstName} {usersdetails.profile.lastName}</p>
-                :
-                <p className=" border-2 border-gray-400 bg-slate-300 p-2 py-2 rounded-md">Data Not Found</p>
-            }
-            
-
-            
-            <p className="mt-7 font-semibold">Job Title</p>
-            {
-                usersdetails?.jobTitle ? 
-                <p className=" border-2 border-gray-400 bg-slate-300 p-2 py-2 rounded-md" >{usersdetails.jobTitle}</p>
-                :
-                <p className=" border-2 border-gray-400 bg-slate-300 p-2 py-2 rounded-md">Data Not Found</p>
-            }
-            
-            <p className="mt-7 font-semibold">Email</p>
-            {
-                usersdetails?.profile?.email  ? 
-                <p className=" border-2 border-gray-400 bg-slate-300 p-2 py-2 rounded-md" >{usersdetails.profile.email}</p>
-                :
-                <p className=" border-2 border-gray-400 bg-slate-300 p-2 py-2 rounded-md">Data Not Found</p>
-            }
-
-
-
-            </div>
-
-
-
-          </div>
         </div>
       </div>
     </div>
