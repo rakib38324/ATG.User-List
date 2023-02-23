@@ -64,14 +64,15 @@ const Home = () => {
 
         {/* user Details Section */}
 
-        <div className=" w-full ">
-          <p className="w-full sticky top-0 shadow-current text-white bg-gray-800 text-3xl text-center py-5 rounded-lg font-bold hover:hover:animate-pulse">
+        <div className=" w-full lg:h-screen lg:overflow-y-auto lg:sticky lg:top-0  ">
+          <p className="w-full shadow-current text-white bg-gray-800 text-3xl text-center py-5 rounded-lg font-bold hover:hover:animate-pulse">
             USER DETAILS
           </p>
 
+          <div className="">
           {
             loadingtwo ?
-             <p className="sticky  lg:top-48 text-center font-semibold text-2xl my-20 flex justify-center text-gray-900">L<p className='w-4 h-4 border-4 mt-3 border-dashed rounded-full animate-spin  border-gray-900'></p>ading...</p>
+             <p className=" text-center font-semibold text-2xl my-20 flex justify-center text-gray-900">L<p className='w-4 h-4 border-4 mt-3 border-dashed rounded-full animate-spin  border-gray-900'></p>ading...</p>
              :
              <div className="lg:sticky lg:top-28 m-2">
              <img
@@ -131,6 +132,7 @@ const Home = () => {
  
            </div>
           }
+          </div>
 
          
         </div>
